@@ -300,14 +300,17 @@ function gotScore(points) {
   console.log(points[0], points[1], points[2], points[3]);
 
   var greatest = Math.min(freshman_SP[0], sophomore_SP[0], junior_SP[0], senior_SP[0]);
-  var all_grades = [freshman_SP, sophomore_SP, junior_SP, senior_SP];
-  console.log("all grades", all_grades);
-  document.getElementById("grades").onclick = function() {sort("grades", all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP);};
-  document.getElementById("points").onclick = function() {sort("points", all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP);};
+  var hs_grades = [freshman_SP, sophomore_SP, junior_SP, senior_SP];
+  console.log("hschool grades", hschool_grades);
+  var greatest2 = Math.min(m_7_SP, m_8_SP);
+  var js_grades = [m_7_SP, m_8_SP];
+  console.log("jschool grades", jschool_grades);
 
-  crowning(all_grades, greatest);
+  crowning1(hschool_grades, greatest);
+  crowning2(jschool_grades, greatest2);
 
-  elementtext(all_grades);
+  elementtext1(hschool_grades);
+  elementtext2(jschool_grades);
   document.getElementById("m_1-points").textContent = m_7_SP[0];
   document.getElementById("m_2-points").textContent = m_8_SP[0];
   document.getElementById("m1").textContent = m_7_SP[1];
@@ -376,36 +379,57 @@ async function validateForm(){
   location.reload();
 }
 
-//Sets the text content of the labels to the variable
-function elementtext(all_grades){
-  document.getElementById("first-points").textContent = all_grades[0][0];
-  document.getElementById("second-points").textContent = all_grades[1][0];
-  document.getElementById("third-points").textContent = all_grades[2][0];
-  document.getElementById("fourth-points").textContent = all_grades[3][0];
+//Sets the text content of the labels to the variable for 9-12
+function elementtext1(hschool_grades){
+  document.getElementById("first-points").textContent = hschool_grades[0][0];
+  document.getElementById("second-points").textContent = hschool_grades[1][0];
+  document.getElementById("third-points").textContent = hschool_grades[2][0];
+  document.getElementById("fourth-points").textContent = hschool_grades[3][0];
 
-  document.getElementById("first").textContent = all_grades[0][1];
-  document.getElementById("second").textContent = all_grades[1][1];
-  document.getElementById("third").textContent = all_grades[2][1];
-  document.getElementById("fourth").textContent = all_grades[3][1];
+  document.getElementById("first").textContent = hschool_grades[0][1];
+  document.getElementById("second").textContent = hschool_grades[1][1];
+  document.getElementById("third").textContent = hschool_grades[2][1];
+  document.getElementById("fourth").textContent = hschool_grades[3][1];
 }
 
-//gives crown
-function crowning(all_grades, greatest){
+//gives crown to 9-12th grades
+function crowning1(hschool_grades, greatest){
   $("#fi-crown").removeClass("fas fa-crown");
   $("#se-crown").removeClass("fas fa-crown");
   $("#th-crown").removeClass("fas fa-crown");
   $("#fo-crown").removeClass("fas fa-crown");
-  if(all_grades[0][0]==greatest){
+  if(hschool_grades[0][0]==greatest){
     $("#fi-crown").addClass("fas fa-crown");
   }
-  if (all_grades[1][0]==greatest) {
+  if (hschool_grades[1][0]==greatest) {
     $("#se-crown").addClass("fas fa-crown");
   }
-  if (all_grades[2][0]==greatest) {
+  if (hschool_grades[2][0]==greatest) {
     $("#th-crown").addClass("fas fa-crown");
   }
-  if (all_grades[3][0]==greatest){
+  if (hschool_grades[3][0]==greatest){
     $("#fo-crown").addClass("fas fa-crown");
+  }
+}
+
+//Sets the text content of the labels to the variable for 7-8
+function elementtext2(jschool_grades){
+  document.getElementById("first-points").textContent = jschool_grades[0][0];
+  document.getElementById("second-points").textContent = jschool_grades[1][0];
+
+  document.getElementById("first").textContent = jschool_grades[0][1];
+  document.getElementById("second").textContent = jschool_grades[1][1];
+}
+
+//gives crown to 7-8th grades
+function crowning2(jschool_grades, greatest2){
+  $("#fi-crown").removeClass("fas fa-crown");
+  $("#se-crown").removeClass("fas fa-crown");
+  if(jschool_grades[0][0]==greatest){
+    $("#fi-crown").addClass("fas fa-crown");
+  }
+  if (jschool_grades[1][0]==greatest) {
+    $("#se-crown").addClass("fas fa-crown");
   }
 }
 
@@ -419,25 +443,20 @@ function sortFunction(a, b){
 }
 
 //toggle button
-function sort(toggle, all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP){
+function sort(toggle, hschool_grades, jschool_grades, m_7_SP, m_8_SP, greatest, greatest2, freshman_SP, sophomore_SP, junior_SP, senior_SP, m_7_SP, m_8_SP){
   if (toggle=="points"){
-    all_grades.sort(sortFunction);
-    if (m_8_SP[0]<=m_7_SP[0]){
-      document.getElementById("m_1-points").textContent = m_8_SP[0];
-      document.getElementById("m_2-points").textContent = m_7_SP[0];
-      document.getElementById("m1").textContent = m_8_SP[1];
-      document.getElementById("m2").textContent = m_7_SP[1];
+    hschool_grades.sort(sortFunction);
+    jschool_grades.sort(sortFunction);
     }
   }
   else{
-    all_grades = [freshman_SP, sophomore_SP, junior_SP, senior_SP];
-    document.getElementById("m_1-points").textContent = m_7_SP[0];
-    document.getElementById("m_2-points").textContent = m_8_SP[0];
-    document.getElementById("m1").textContent = m_7_SP[1];
-    document.getElementById("m2").textContent = m_8_SP[1];
+    hschool_grades = [freshman_SP, sophomore_SP, junior_SP, senior_SP];
+    jschool_grades = [m_7_SP, m_8_SP]
   }
-  elementtext(all_grades);
-  crowning(all_grades, greatest);
+  elementtext1(hschool_grades);
+  crowning1(hschool_grades, greatest);
+  elementtext2(jschool_grades);
+  crowning2(jschool_grades, greatest2);
   return;
 }
 
