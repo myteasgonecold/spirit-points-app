@@ -341,19 +341,27 @@ function gotScore(points) {
   var greatest = Math.max(freshman_SP[0], sophomore_SP[0], junior_SP[0], senior_SP[0]);
   var all_grades = [freshman_SP, sophomore_SP, junior_SP, senior_SP];
   console.log("all grades", all_grades);
-  document.getElementById("grades").onclick = function() {sort("grades", all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP);};
-  document.getElementById("points").onclick = function() {sort("points", all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP);};
-  document.getElementById("graph").onclick = function() {sort("graph", all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP);};
   crowning(all_grades, greatest);
 
   elementtext(all_grades);
-  document.getElementById("m_1-points").textContent = m_7_SP[0];
-  document.getElementById("m_2-points").textContent = m_8_SP[0];
-  document.getElementById("m1").textContent = m_7_SP[1];
-  document.getElementById("m2").textContent = m_8_SP[1];
 
+  var greatest_middle = Math.max(m_8_SP[0], m_7_SP[0]);
+  var all_grades_middle = [m_7_SP, m_8_SP];
+  console.log("all grades", all_grades_middle);
+  crowning_middle(all_grades_middle, greatest_middle);
 
+  elementtext_middle(all_grades_middle);
 
+  document.getElementById("grades").onclick = function() {
+    // sort("grades", all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP);
+    sort("grades", all_grades, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP, all_grades_middle, greatest_middle, m_8_SP, m_7_SP);
+  };
+  document.getElementById("points").onclick = function() {
+    sort("points", all_grades, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP, all_grades_middle, greatest_middle, m_8_SP, m_7_SP);
+  };
+  document.getElementById("graph").onclick = function() {
+    sort("graph", all_grades, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP, all_grades_middle, greatest_middle, m_8_SP, m_7_SP);
+  };
 }
 
 
@@ -430,6 +438,14 @@ function elementtext(all_grades){
   document.getElementById("fourth").textContent = all_grades[3][1];
 }
 
+function elementtext_middle(all_grades_middle){
+  // document.getElementById("m_1-points").textContent = all_grades_middle[0][0];
+  $("#m_1-points").text(all_grades_middle[0][0]);
+  document.getElementById("m_2-points").textContent = all_grades_middle[1][0];
+
+  document.getElementById("m_1").textContent = all_grades_middle[0][1];
+  document.getElementById("m_2").textContent = all_grades_middle[1][1];
+}
 //gives crown
 function crowning(all_grades, greatest){
   $("#fi-crown").removeClass("fas fa-crown");
@@ -450,6 +466,18 @@ function crowning(all_grades, greatest){
   }
 }
 
+function crowning_middle(all_grades_middle, greatest_middle){
+  $("#first-crown").removeClass("fas fa-crown");
+  $("#second-crown").removeClass("fas fa-crown");
+
+  if(all_grades_middle[0][0]==greatest_middle){
+    $("#first-crown").addClass("fas fa-crown");
+  }
+  if (all_grades_middle[1][0]==greatest_middle) {
+    $("#second-crown").addClass("fas fa-crown");
+  }
+}
+
 function sortFunction(a, b){
   if (a[0] === b[0]) {
         return 0;
@@ -460,7 +488,7 @@ function sortFunction(a, b){
 }
 
 //toggle button
-function sort(toggle, all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP){
+function sort(toggle, all_grades, greatest, freshman_SP, sophomore_SP, junior_SP, senior_SP, all_grades_middle, greatest_middle, m_8_SP, m_7_SP, ){
   if (toggle=="points"){
 
     var graph = document.getElementById("chartContainer");
@@ -479,14 +507,17 @@ function sort(toggle, all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomo
     middleSchoolText.style.display = "flex";
 
     all_grades.sort(sortFunction);
-    if (m_8_SP[0]>=m_7_SP[0]){
-      document.getElementById("m_1-points").textContent = m_8_SP[0];
-      document.getElementById("m_2-points").textContent = m_7_SP[0];
-      document.getElementById("m1").textContent = m_8_SP[1];
-      document.getElementById("m2").textContent = m_7_SP[1];
-    }
+
+    all_grades_middle.sort(sortFunction);
+
+    //if (m_8_SP[0]>=m_7_SP[0]){
+    //  document.getElementById("m_1-points").textContent = m_8_SP[0];
+    //  document.getElementById("m_2-points").textContent = m_7_SP[0];
+    //  document.getElementById("m1").textContent = m_8_SP[1];
+    //  document.getElementById("m2").textContent = m_7_SP[1];
+    // }
   }
-  if (toggle=="grades"){
+  else if (toggle=="grades"){
 
     var graph = document.getElementById("chartContainer");
     graph.style.display = "none";
@@ -504,12 +535,14 @@ function sort(toggle, all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomo
     middleSchoolText.style.display = "flex";
 
     all_grades = [freshman_SP, sophomore_SP, junior_SP, senior_SP];
-    document.getElementById("m_1-points").textContent = m_7_SP[0];
-    document.getElementById("m_2-points").textContent = m_8_SP[0];
-    document.getElementById("m1").textContent = m_7_SP[1];
-    document.getElementById("m2").textContent = m_8_SP[1];
+
+    all_grades_middle = [m_7_SP, m_8_SP];
+    //document.getElementById("m_1-points").textContent = m_7_SP[0];
+    //document.getElementById("m_2-points").textContent = m_8_SP[0];
+    //document.getElementById("m1").textContent = m_7_SP[1];
+    //document.getElementById("m2").textContent = m_8_SP[1];
   }
-  if (toggle=="graph"){
+  else if (toggle=="graph"){
     createChart(m_7_SP[0], m_8_SP[0], freshman_SP[0], sophomore_SP[0], junior_SP[0], senior_SP[0]);
     var graph = document.getElementById("chartContainer");
     graph.style.display = "block";
@@ -527,8 +560,13 @@ function sort(toggle, all_grades, m_8_SP, m_7_SP, greatest, freshman_SP, sophomo
     var middleSchoolText = document.getElementById("middle-school-text");
     middleSchoolText.style.display = "none";
   }
+
   elementtext(all_grades);
   crowning(all_grades, greatest);
+
+  elementtext_middle(all_grades_middle);
+  crowning_middle(all_grades_middle, greatest_middle);
+
   return;
 }
 
